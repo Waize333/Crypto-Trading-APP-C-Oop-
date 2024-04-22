@@ -65,6 +65,10 @@ void processUserOption(int userOption ){
 }
 
 int main() {
+//making a enum class
+enum class OderBookType{bid,ask};
+OderBookType ordertype=OderBookType::ask;
+
     // Making a menu
     while(true){
         printMenu();
