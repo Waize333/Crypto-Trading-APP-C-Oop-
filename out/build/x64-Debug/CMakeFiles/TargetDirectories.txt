@@ -1,0 +1,3 @@
+D:/C++ Oop/Oop Projects/proj trading final/proj-trad-block/out/build/x64-Debug/CMakeFiles/proj_trad_block.dir
+D:/C++ Oop/Oop Projects/proj trading final/proj-trad-block/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+D:/C++ Oop/Oop Projects/proj trading final/proj-trad-block/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
