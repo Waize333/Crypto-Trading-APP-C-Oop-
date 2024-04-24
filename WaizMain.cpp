@@ -1,9 +1,6 @@
 #include"WaizMain.h"
 #include "OrderBookEntry.h"
 
-
-
-
 WaizMain::WaizMain(){}
 
 void WaizMain::init()
