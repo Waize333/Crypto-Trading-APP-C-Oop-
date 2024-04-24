@@ -77,7 +77,7 @@ void WaizMain::processUserOption(int userOption ){
     }
     if (userOption==5) {
         pritWallet();
-    }
+    }   
     if (userOption==6) {
        nextTimeFrame();
     }
