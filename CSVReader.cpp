@@ -14,14 +14,21 @@ vector<OrderBookEntry> CSVReader::ReadCSV(string csvFileName) {
 	string line;
     if(csvFile.is_open())
     {
-    while (/* condition */)
-    {
-        /* code */
-    }
+		while (getline(csvFile,line))
+		{
+			try{
+		OrderBookEntry obe = stringsToOBE(tokenise(line,','));
+		entries.push_back(obe);
+		}catch(const exception& e)
+		{
+			cout<<"CSVReader::readcsv Bad data"<<endl;
+
+		}
+		}
+		cout<<"CSVReader::readcsv "<<entries.size()<<endl;
     
     }
-
-
+	
     return entries;
 }
 
@@ -31,9 +38,10 @@ vector<string> CSVReader::tokenise(string csvLine, char separator) {
     vector<string>tokens;
 	signed int start, end;
 	string token;
-	start = csvLine.find_first_not_of(seperator, 0);
+	
+	start = csvLine.find_first_not_of(separator, 0);
 	do {
-		end = csvLine.find_first_of(seperator, start);
+		end = csvLine.find_first_of(separator, start);
 		if (start == csvLine.length() || start == end)break;
 		if (end >= 0)
 		{
@@ -72,11 +80,11 @@ OrderBookEntry CSVReader::stringsToOBE(vector<string> tokens) {
 
 
     
-    OrderBookEntry entry{price,
+    OrderBookEntry obe{price,
                         amount,
                         tokens[0],
                         tokens[1],
                          OrderBookEntry::stringToOrderbookType(tokens[2])};
     // Implementation here
-    return entry;
+    return obe;
 }

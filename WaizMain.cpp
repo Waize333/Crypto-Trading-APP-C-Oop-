@@ -1,5 +1,6 @@
 #include"WaizMain.h"
 #include "OrderBookEntry.h"
+#include"CSVReader.h"
 
 WaizMain::WaizMain(){}
 
@@ -15,9 +16,10 @@ void WaizMain::init()
 
 }
 
-void WaizMain::loadOrderBook() {
-    orders.push_back(OrderBookEntry(100, 0.02, "2020/03/17 17:01:24.884492", "ETH/BTC", orderBookType::bid));
-    orders.push_back(OrderBookEntry(500, 0.02, "2020/04/17 17:01:24.88492", "USDT/BTC", orderBookType::bid));
+void WaizMain::loadOrderBook()
+{
+ orders = CSVReader::ReadCSV("tradingData.csv");  
+ 
 }
 
 void WaizMain::printMenu(){
@@ -42,6 +44,20 @@ cout<<"Help - Make Money by analysing the market,Make bids and Offers "<<endl;
 }
 void WaizMain::printMarketStats(){
  cout<<"Orderbook Contains:"<<orders.size()<<" :enteries"<<endl;
+ unsigned int bids = 0;
+ unsigned int asks =0;
+ for(OrderBookEntry&e : orders)
+ {
+    if(e.ordertype==orderBookType::ask)
+    {
+        asks ++;
+    }
+    if(e.ordertype==orderBookType::bid)
+    {
+        bids ++;
+    }
+ }
+ cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
 }
 void WaizMain::enterOffer(){
     cout<<"Make an Offer"<<endl;

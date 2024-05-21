@@ -16,7 +16,7 @@ OrderBookEntry::OrderBookEntry(double price,
     // Constructor body
 }
 
-orderBookType stringToOrderbookType(string s)
+orderBookType OrderBookEntry::stringToOrderbookType(string s)
 {
   if(s=="ask")
   {

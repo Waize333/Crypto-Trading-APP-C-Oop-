@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-    // WaizMain app{};
-    // app.init();
-    CSVReader reader;
+    WaizMain app{};
+    app.init();
+    
 }
