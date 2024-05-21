@@ -15,3 +15,17 @@ OrderBookEntry::OrderBookEntry(double price,
 {
     // Constructor body
 }
+
+orderBookType stringToOrderbookType(string s)
+{
+  if(s=="ask")
+  {
+    return orderBookType::ask;
+  }
+  if(s=="bid")
+  {
+    return orderBookType::bid;
+  }
+  return orderBookType::unknown;
+
+}

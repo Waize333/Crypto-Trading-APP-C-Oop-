@@ -3,6 +3,7 @@
 #include<vector>
 #include "OrderBookEntry.h"
 #include "WaizMain.h"
+#include"CSVReader.h"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ using namespace std;
 
 int main()
 {
-    WaizMain app{};
-    app.init();
+    // WaizMain app{};
+    // app.init();
+    CSVReader reader;
 }

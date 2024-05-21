@@ -30,7 +30,7 @@ vector<string>tokenise(string csvLine,char seperator)
 		return tokens;
 }
 
-int main() {
+/*int main() {
 	//vector<string>tokens;
 	//string s = "thing1,thing2,thing3";
 	//tokens = tokenise(s, ',');
@@ -86,4 +86,4 @@ int main() {
 
 	//return 0;
 	
-}
+}*/
