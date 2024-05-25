@@ -1,13 +1,15 @@
 #include"WaizMain.h"
 #include "OrderBookEntry.h"
 #include"CSVReader.h"
+#include"OrderBook.h"
 
 WaizMain::WaizMain(){}
 
 void WaizMain::init()
 {
-    loadOrderBook();
+ 
     int input;
+    currentTime=orderBook.getEarliestTime();
     while(true){
         printMenu();
         input=getUserOption();
@@ -16,11 +18,6 @@ void WaizMain::init()
 
 }
 
-void WaizMain::loadOrderBook()
-{
- orders = CSVReader::ReadCSV("tradingData.csv");  
- 
-}
 
 void WaizMain::printMenu(){
     cout<<"1: Print help"<<endl;
@@ -30,6 +27,7 @@ void WaizMain::printMenu(){
     cout<<"5: Print Wallet"<<endl;
     cout<<"6: Continue"<<endl;
     cout<<"==================="<<endl;
+    cout<<"THe Current Time is:"<<currentTime<<endl;
        
 }
 int WaizMain::getUserOption(){
@@ -43,21 +41,31 @@ void WaizMain::printHelp(){
 cout<<"Help - Make Money by analysing the market,Make bids and Offers "<<endl;
 }
 void WaizMain::printMarketStats(){
- cout<<"Orderbook Contains:"<<orders.size()<<" :enteries"<<endl;
- unsigned int bids = 0;
- unsigned int asks =0;
- for(OrderBookEntry&e : orders)
- {
-    if(e.ordertype==orderBookType::ask)
+
+    for(auto const& p:orderBook.getKnownProducts())
     {
-        asks ++;
+        cout<<"Products : "<<p<<endl;
+        vector<OrderBookEntry>entries=orderBook.getOrders(orderBookType::ask,p,"2020/03/17 17:01:30.099017");
+        cout<<"Asks Seens Are: "<<entries.size()<<endl;
+        cout<<"Max Ask: "<<OrderBook::getHighPrice(entries)<<endl;
+        cout<<"Min Ask: "<<OrderBook::getMinPrice(entries)<<endl;
+
     }
-    if(e.ordertype==orderBookType::bid)
-    {
-        bids ++;
-    }
- }
- cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
+//  cout<<"Orderbook Contains:"<<orders.size()<<" :enteries"<<endl;
+//  unsigned int bids = 0;
+//  unsigned int asks =0;
+//  for(OrderBookEntry&e : orders)
+//  {
+//     if(e.ordertype==orderBookType::ask)
+//     {
+//         asks ++;
+//     }
+//     if(e.ordertype==orderBookType::bid)
+//     {
+//         bids ++;
+//     }
+//  }
+// cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
 }
 void WaizMain::enterOffer(){
     cout<<"Make an Offer"<<endl;

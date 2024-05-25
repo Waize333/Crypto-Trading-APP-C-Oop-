@@ -1,6 +1,7 @@
 #include<vector>
 #include<iostream>
 #include"OrderBookEntry.h"
+#include"OrderBook.h"
 using namespace std;
 class WaizMain
 {
@@ -10,7 +11,6 @@ public:
     WaizMain();
     void init();
     private:
-    void loadOrderBook();
     void printMenu();
     int getUserOption();
     void printHelp();
@@ -20,7 +20,9 @@ public:
     void pritWallet();
     void nextTimeFrame();
     void processUserOption(int userOption );
-    vector<OrderBookEntry> orders;
+    
+    OrderBook orderBook{"tradingData.csv"};
+    string currentTime;
    
 };
 
