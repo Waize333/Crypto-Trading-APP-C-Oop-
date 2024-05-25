@@ -27,7 +27,7 @@ void WaizMain::printMenu(){
     cout<<"5: Print Wallet"<<endl;
     cout<<"6: Continue"<<endl;
     cout<<"==================="<<endl;
-    cout<<"THe Current Time is:"<<currentTime<<endl;
+    cout<<"Current Time:"<<currentTime<<endl;
        
 }
 int WaizMain::getUserOption(){
@@ -45,7 +45,7 @@ void WaizMain::printMarketStats(){
     for(auto const& p:orderBook.getKnownProducts())
     {
         cout<<"Products : "<<p<<endl;
-        vector<OrderBookEntry>entries=orderBook.getOrders(orderBookType::ask,p,"2020/03/17 17:01:30.099017");
+        vector<OrderBookEntry>entries=orderBook.getOrders(orderBookType::ask,p,currentTime);
         cout<<"Asks Seens Are: "<<entries.size()<<endl;
         cout<<"Max Ask: "<<OrderBook::getHighPrice(entries)<<endl;
         cout<<"Min Ask: "<<OrderBook::getMinPrice(entries)<<endl;
@@ -67,8 +67,8 @@ void WaizMain::printMarketStats(){
 //  }
 // cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
 }
-void WaizMain::enterOffer(){
-    cout<<"Make an Offer"<<endl;
+void WaizMain::enterAsk(){
+    cout<<"Make an Askr"<<endl;
     }
 void WaizMain::enterBid(){
      cout<<"Make a Bid"<<endl;
@@ -79,6 +79,7 @@ void WaizMain::pritWallet(){
 }
 void WaizMain::nextTimeFrame(){
      cout<<"Going to next step"<<endl;
+     currentTime=orderBook.getNextTime(currentTime);
 }
 void WaizMain::processUserOption(int userOption ){
     if (userOption==0) {

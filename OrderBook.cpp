@@ -68,3 +68,18 @@
     {
         return orders[0].timeStamp;
     }
+string OrderBook::getNextTime(string timeStamp)
+{
+    
+    string nextTimeStamp = "";
+    for (const auto& e : orders) {
+        if (e.timeStamp > timeStamp) {
+            nextTimeStamp = e.timeStamp;
+            break;
+        }
+    }
+    if (nextTimeStamp == "" && !orders.empty()) {
+        nextTimeStamp = orders[0].timeStamp;
+    }
+    return nextTimeStamp;
+}

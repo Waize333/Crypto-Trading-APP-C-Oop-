@@ -15,6 +15,7 @@ class OrderBook
                                     string timeStamp );
 
     string getEarliestTime();
+    string getNextTime(string timeStamp);
     static double getHighPrice(vector<OrderBookEntry>& orders);
     static double getMinPrice(vector<OrderBookEntry>& orders);
     private :

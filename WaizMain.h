@@ -15,7 +15,7 @@ public:
     int getUserOption();
     void printHelp();
     void printMarketStats();
-    void enterOffer();
+    void enterAsk();
     void enterBid();
     void pritWallet();
     void nextTimeFrame();
