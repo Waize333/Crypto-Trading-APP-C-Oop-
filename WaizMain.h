@@ -2,6 +2,7 @@
 #include<iostream>
 #include"OrderBookEntry.h"
 #include"OrderBook.h"
+#include"wallet.h"
 using namespace std;
 class WaizMain
 {
@@ -23,6 +24,6 @@ public:
     
     OrderBook orderBook{"tradingData.csv"};
     string currentTime;
-   
+    Wallet wallet;
 };
 

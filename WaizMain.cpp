@@ -2,6 +2,7 @@
 #include "OrderBookEntry.h"
 #include"CSVReader.h"
 #include"OrderBook.h"
+#include<limits>
 
 WaizMain::WaizMain(){}
 
@@ -10,6 +11,8 @@ void WaizMain::init()
  
     int input;
     currentTime=orderBook.getEarliestTime();
+    wallet.insertCurrency("BTC",10);
+    
     while(true){
         printMenu();
         input=getUserOption();
@@ -22,7 +25,7 @@ void WaizMain::init()
 void WaizMain::printMenu(){
     cout<<"1: Print help"<<endl;
     cout<<"2: Print Exchange Stats"<<endl;
-    cout<<"3: Make an offer"<<endl;
+    cout<<"3: Make an Ask"<<endl;
     cout<<"4: Make a Bid"<<endl;
     cout<<"5: Print Wallet"<<endl;
     cout<<"6: Continue"<<endl;
@@ -32,8 +35,13 @@ void WaizMain::printMenu(){
 }
 int WaizMain::getUserOption(){
     cout<<"Select an Option Between 1 To 6"<<endl;
-    int userOption;
-    cin>>userOption;
+    int userOption=0;
+    string line;
+    getline(cin,line);
+    try{
+    userOption=stoi(line);
+    }catch(const exception&e)
+    {}
     cout<<"Your Choice: "<<userOption<<endl;
     return userOption;
 }
@@ -68,17 +76,66 @@ void WaizMain::printMarketStats(){
 // cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
 }
 void WaizMain::enterAsk(){
-    cout<<"Make an Askr"<<endl;
+    cout<<"Make an Ask-Enter the Amount:Product,Price,Amount, eg [ETH/BTC,200,0.5]"<<endl;
+    string input;
+    //The purpose of the function is to clear the input buffer up to the next newline character.
+    getline(cin,input);
+    vector<string>tokens=CSVReader::tokenise(input,',');
+    if(tokens.size()!=3)
+    {
+        cout<<"Bad Input "<<input<<endl;
+    }else
+    {
+        try{
+        OrderBookEntry obe = CSVReader::stringsToOBE(
+            tokens[1],tokens[2],currentTime,
+            tokens[0],orderBookType::ask
+        );
+        orderBook.insertOrder(obe);
+        }catch(const exception& e)
+        {
+            cout<<"WaizMain::enterAsk Bad Input"<<endl;
+        }
+    }
+    cout<<"You Typed: "<<input<<endl;
     }
 void WaizMain::enterBid(){
-     cout<<"Make a Bid"<<endl;
+      cout<<"Make an Bid-Enter the Amount:Product,Price,Amount, eg [ETH/BTC,200,0.5]"<<endl;
+    string input;
+    //The purpose of the function is to clear the input buffer up to the next newline character.
+    getline(cin,input);
+    vector<string>tokens=CSVReader::tokenise(input,',');
+    if(tokens.size()!=3)
+    {
+        cout<<"Bad Input "<<input<<endl;
+    }else
+    {
+        try{
+        OrderBookEntry obe = CSVReader::stringsToOBE(
+            tokens[1],tokens[2],currentTime,
+            tokens[0],orderBookType::bid
+        );
+        orderBook.insertOrder(obe);
+        }catch(const exception& e)
+        {
+            cout<<"WaizMain::enterBid Bad Input"<<endl;
+        }
+    }
+    cout<<"You Typed: "<<input<<endl;
+    }
 
-}
 void WaizMain::pritWallet(){
     cout<<"Your Wallet:"<<endl;
+    cout<<wallet.toString()<<endl;
 }
 void WaizMain::nextTimeFrame(){
      cout<<"Going to next step"<<endl;
+     vector<OrderBookEntry> sales =orderBook.matchAsksToBids("ETH/BTC",currentTime);
+     cout<<"Sales: "<<sales.size()<<endl;
+    for(OrderBookEntry&sale: sales)
+    {
+        cout<<"Sale Amount: "<<sale.price<<"amount"<<sale.amount<<endl;
+    }
      currentTime=orderBook.getNextTime(currentTime);
 }
 void WaizMain::processUserOption(int userOption ){
@@ -92,7 +149,7 @@ void WaizMain::processUserOption(int userOption ){
        printMarketStats();
     }
     if (userOption==3) {
-        enterOffer();
+        enterAsk();
     }
     if (userOption==4) {
        enterBid();

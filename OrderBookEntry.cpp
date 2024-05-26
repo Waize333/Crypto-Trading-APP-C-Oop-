@@ -29,3 +29,7 @@ orderBookType OrderBookEntry::stringToOrderbookType(string s)
   return orderBookType::unknown;
 
 }
+ bool OrderBookEntry::compareByTimeStamp(OrderBookEntry& e1,OrderBookEntry& e2)
+{
+  return e1.timeStamp<e2.timeStamp;
+}

@@ -12,7 +12,10 @@ using namespace std;
 
 int main()
 {
-    WaizMain app{};
-    app.init();
+    // WaizMain app{};
+    // app.init();
+    Wallet Wallet;
+    Wallet.insertCurrency("BTC",10);
+   
     
 }

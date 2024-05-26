@@ -16,6 +16,8 @@ class OrderBook
 
     string getEarliestTime();
     string getNextTime(string timeStamp);
+    void insertOrder(OrderBookEntry& order);
+    vector<OrderBookEntry> matchAsksToBids(string product,string timeStamp);
     static double getHighPrice(vector<OrderBookEntry>& orders);
     static double getMinPrice(vector<OrderBookEntry>& orders);
     private :
