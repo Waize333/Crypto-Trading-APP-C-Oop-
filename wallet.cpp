@@ -1,5 +1,6 @@
 #include"wallet.h"
 #include"CSVReader.h"
+using namespace std;
 
 Wallet::Wallet()
 {
@@ -10,7 +11,7 @@ void Wallet::insertCurrency(string type, double amount)
     double balance;
     if (amount < 0)
     {
-        throw std::exception{};
+        throw exception{};
     }
     if (currencies.count(type) == 0) // not there yet
     {
@@ -29,22 +30,24 @@ bool Wallet::removeCurrency(string type, double amount)
     {
         return false; 
     }
-    if (currencies.count(type) == 0) // not there yet
+    if (!containsCurrency(type, amount)) // Check if the currency is present and if there's enough amount
     {
-        //std::cout << "No currency for " << type << std::endl;
         return false;
     }
-    else { // is there - do  we have enough
-        if (containsCurrency(type, amount))// we have enough
-        {
-            //std::cout << "Removing " << type << ": " << amount << std::endl;
-            currencies[type] -= amount;
-            return true;
-        } 
-        else // they have it but not enough.
-            return false; 
+
+    // Deduct the amount
+    currencies[type] -= amount;
+
+    // Ensure the balance doesn't go negative
+    if (currencies[type] < 0)
+    {
+        currencies[type] = 0;
+        return false;
     }
+    
+    return true;
 }
+
 
 bool Wallet::containsCurrency(string type, double amount)
 {
@@ -75,7 +78,7 @@ bool Wallet::canFulfilOrder(OrderBookEntry order)
     {
         double amount = order.amount;
         string currency = currs[0];
-        cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
+        cout << "Wallet::canFulfillOrder " << currency << " : " << amount <<endl;
 
         return containsCurrency(currency, amount);
     }
@@ -84,7 +87,7 @@ bool Wallet::canFulfilOrder(OrderBookEntry order)
     {
         double amount = order.amount * order.price;
         string currency = currs[1];
-        cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
+        cout << "Wallet::canFulfillOrder " << currency << " : " << amount <<endl;
         return containsCurrency(currency, amount);
     }
 
@@ -92,11 +95,10 @@ bool Wallet::canFulfilOrder(OrderBookEntry order)
     return false; 
 }
       
-
 void Wallet::processSale(OrderBookEntry& sale)
 {
     vector<string> currs = CSVReader::tokenise(sale.product, '/');
-    // ask
+    // ask sale
     if (sale.ordertype == orderBookType::askSale)
     {
         double outgoingAmount = sale.amount;
@@ -106,9 +108,8 @@ void Wallet::processSale(OrderBookEntry& sale)
 
         currencies[incomingCurrency] += incomingAmount;
         currencies[outgoingCurrency] -= outgoingAmount;
-
     }
-    // bid
+    // bid sale
     if (sale.ordertype == orderBookType::bidSale)
     {
         double incomingAmount = sale.amount;
@@ -120,6 +121,7 @@ void Wallet::processSale(OrderBookEntry& sale)
         currencies[outgoingCurrency] -= outgoingAmount;
     }
 }
+
 ostream& operator<<(ostream& os,  Wallet& wallet)
 {
     os << wallet.toString();

@@ -1,8 +1,0 @@
-# ninja log v5
-15	1048	7355834856240559	CMakeFiles/proj_trad_block.dir/OrderBookEntry.cpp.obj	ef229634ba0f958
-19	1830	7355834863995187	CMakeFiles/proj_trad_block.dir/WaizMain.cpp.obj	f2a3a0099474b1a
-8	1911	7355834864862875	CMakeFiles/proj_trad_block.dir/main.cpp.obj	c057dd094f5f91c4
-1911	3963	7355834883765334	proj_trad_block.exe	10275c4a26717e81
-24	1145	7355838004801606	CMakeFiles/proj_trad_block.dir/main.cpp.obj	c057dd094f5f91c4
-29	1211	7355838005479796	CMakeFiles/proj_trad_block.dir/WaizMain.cpp.obj	f2a3a0099474b1a
-1211	1453	7355838007304916	proj_trad_block.exe	10275c4a26717e81

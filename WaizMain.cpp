@@ -33,18 +33,7 @@ void WaizMain::printMenu(){
     cout<<"Current Time:"<<currentTime<<endl;
        
 }
-int WaizMain::getUserOption(){
-    cout<<"Select an Option Between 1 To 6"<<endl;
-    int userOption=0;
-    string line;
-    getline(cin,line);
-    try{
-    userOption=stoi(line);
-    }catch(const exception&e)
-    {}
-    cout<<"Your Choice: "<<userOption<<endl;
-    return userOption;
-}
+
 void WaizMain::printHelp(){
 cout<<"Help - Make Money by analysing the market,Make bids and Offers "<<endl;
 }
@@ -79,7 +68,7 @@ void WaizMain::enterAsk(){
         obe.username="simUser";
         if(wallet.canFulfilOrder(obe))
         {
-            cout<<"Wallet is valid"<<endl;
+            cout<<"Wallet is valid for transaction"<<endl;
             orderBook.insertOrder(obe);
         }else
         {cout<<"Wallet hass insufficient funds"<<endl;}
@@ -88,8 +77,7 @@ void WaizMain::enterAsk(){
             cout<<"WaizMain::enterAsk Bad Input"<<endl;
         }
     }
-    cout<<"You Typed: "<<input<<endl;
-    }
+ }
 void WaizMain::enterBid(){
       cout<<"Make an Bid-Enter the Amount:Product,Price,Amount, eg [ETH/BTC,200,0.5]"<<endl;
     string input;
@@ -118,10 +106,9 @@ void WaizMain::enterBid(){
             cout<<"WaizMain::enterBid Bad Input"<<endl;
         }
     }
-    cout<<"You Typed: "<<input<<endl;
-    }
+}
 
-void WaizMain::pritWallet()
+void WaizMain::printWallet()
 {
     cout<<wallet.toString()<<endl;
 }
@@ -136,7 +123,7 @@ void WaizMain::nextTimeFrame(){
         for (OrderBookEntry& sale : sales)
         {
             std::cout << "Sale price: " << sale.price << " amount " << sale.amount << std::endl; 
-            if (sale.username == "simuser")
+            if (sale.username == "simUser")
             {
                 // update the wallet
                 wallet.processSale(sale);
@@ -147,6 +134,19 @@ void WaizMain::nextTimeFrame(){
 
     currentTime = orderBook.getNextTime(currentTime);
 }
+int WaizMain::getUserOption(){
+    cout<<"Select an Option Between 1 To 6"<<endl;
+    int userOption=0;
+    string line;
+    getline(cin,line);
+    try{
+    userOption=stoi(line);
+    }catch(const exception&e)
+    {}
+    cout<<"Your Choice: "<<userOption<<endl;
+    return userOption;
+}
+
 void WaizMain::processUserOption(int userOption ){
     if (userOption==0) {
         cout<<"Invalid Choice ,Choose between 1 to 6"<<endl;
@@ -164,7 +164,7 @@ void WaizMain::processUserOption(int userOption ){
        enterBid();
     }
     if (userOption==5) {
-        pritWallet();
+        printWallet();
     }   
     if (userOption==6) {
        nextTimeFrame();

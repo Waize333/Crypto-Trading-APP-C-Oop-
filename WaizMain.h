@@ -1,3 +1,4 @@
+#pragma once
 #include<vector>
 #include<iostream>
 #include"OrderBookEntry.h"
@@ -18,7 +19,7 @@ public:
     void printMarketStats();
     void enterAsk();
     void enterBid();
-    void pritWallet();
+    void printWallet();
     void nextTimeFrame();
     void processUserOption(int userOption );
     

@@ -138,14 +138,14 @@ for(OrderBookEntry& bid :bids){
                         timeStamp,product,
                         orderBookType::askSale};
 
-        orderBookType type=orderBookType::askSale;
-        if(bid.username=="simuser"){
-            sale.username="simuser";
+     
+        if(bid.username=="simUser"){
+            sale.username="simUser";
             sale.ordertype=orderBookType::bidSale;
         }
-         if(bid.username=="simuser")
+         if(ask.username=="simUser")
         {
-            sale.username="simuser";
+            sale.username="simUser";
             sale.ordertype=orderBookType::askSale;
         }
 
@@ -172,6 +172,7 @@ for(OrderBookEntry& bid :bids){
         // sale.amount = ask.amount
         sale.amount=ask.amount;   
         // sales.append(sale)
+         sales.push_back(sale);
         // # we adjust the bid in place
         // # so it can be used to process the next ask
         // bid.amount = bid.amount - ask.amount

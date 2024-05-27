@@ -54,7 +54,7 @@ vector<string> CSVReader::tokenise(string csvLine, char separator) {
 		tokens.push_back(token);
 		start = end + 1;
 
-	} while (end>0);
+	} while (end > 0);
 
 		return tokens;
 }
