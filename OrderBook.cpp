@@ -120,10 +120,10 @@ auto Dsc = [](const OrderBookEntry& e1, const OrderBookEntry& e2) {
 };
     sort(bids.begin(),bids.end(),Dsc);
 
-    cout << "max ask " << asks[asks.size()-1].price << std::endl;
-    cout << "min ask " << asks[0].price << std::endl;
-    cout << "max bid " << bids[0].price << std::endl;
-    cout << "min bid " << bids[bids.size()-1].price << std::endl;
+    cout << "max ask " << asks[asks.size()-1].price << endl;
+    cout << "min ask " << asks[0].price << endl;
+    cout << "max bid " << bids[0].price << endl;
+    cout << "min bid " << bids[bids.size()-1].price <<endl;
     
 // for ask in asks:
 for(OrderBookEntry& ask :asks){

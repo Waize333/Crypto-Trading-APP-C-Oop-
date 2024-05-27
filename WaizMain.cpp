@@ -174,7 +174,7 @@ int WaizMain::getUserOption(){
     userOption=stoi(line);
     }catch(const exception&e)
     {}
-    cout<<"Your Choice: "<<userOption<<endl;
+    cout<<"Your Choice: "<<userOption<<endl<<endl;
     return userOption;
 }
 
