@@ -121,10 +121,11 @@ void WaizMain::enterBid(){
     cout<<"You Typed: "<<input<<endl;
     }
 
-void WaizMain::pritWallet(){
-    cout<<"Your Wallet:"<<endl;
+void WaizMain::pritWallet()
+{
     cout<<wallet.toString()<<endl;
 }
+
 void WaizMain::nextTimeFrame(){
     std::cout << "Going to next time frame. " << std::endl;
     for (std::string p : orderBook.getKnownProducts())

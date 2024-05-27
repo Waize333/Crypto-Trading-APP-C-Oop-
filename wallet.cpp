@@ -5,7 +5,7 @@ Wallet::Wallet()
 {
 
 }
-void Wallet::insertCurrency(std::string type, double amount)
+void Wallet::insertCurrency(string type, double amount)
 {
     double balance;
     if (amount < 0)
@@ -23,7 +23,7 @@ void Wallet::insertCurrency(std::string type, double amount)
     currencies[type] = balance; 
 }
 
-bool Wallet::removeCurrency(std::string type, double amount)
+bool Wallet::removeCurrency(string type, double amount)
 {
     if (amount < 0)
     {
@@ -46,7 +46,7 @@ bool Wallet::removeCurrency(std::string type, double amount)
     }
 }
 
-bool Wallet::containsCurrency(std::string type, double amount)
+bool Wallet::containsCurrency(string type, double amount)
 {
     if (currencies.count(type) == 0) // not there yet
         return false;
@@ -55,27 +55,27 @@ bool Wallet::containsCurrency(std::string type, double amount)
     
 }
 
-std::string Wallet::toString()
+string Wallet::toString()
 {
-    std::string s;
-    for (std::pair<std::string,double> pair : currencies)
+    string s;
+    for (pair<string,double> pair : currencies)
     {
-        std::string currency = pair.first;
+        string currency = pair.first;
         double amount = pair.second;
-        s += currency + " : " + std::to_string(amount) + "\n";
+        s += currency + " : " + to_string(amount) + "\n";
     }
     return s;
 }
 
 bool Wallet::canFulfilOrder(OrderBookEntry order)
 {
-    std::vector<std::string> currs = CSVReader::tokenise(order.product, '/');
+   vector<string> currs = CSVReader::tokenise(order.product, '/');
     // ask
     if (order.ordertype == orderBookType::ask)
     {
         double amount = order.amount;
-        std::string currency = currs[0];
-        std::cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
+        string currency = currs[0];
+        cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
 
         return containsCurrency(currency, amount);
     }
@@ -83,8 +83,8 @@ bool Wallet::canFulfilOrder(OrderBookEntry order)
     if (order.ordertype == orderBookType::bid)
     {
         double amount = order.amount * order.price;
-        std::string currency = currs[1];
-        std::cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
+        string currency = currs[1];
+        cout << "Wallet::canFulfillOrder " << currency << " : " << amount << std::endl;
         return containsCurrency(currency, amount);
     }
 
@@ -95,14 +95,14 @@ bool Wallet::canFulfilOrder(OrderBookEntry order)
 
 void Wallet::processSale(OrderBookEntry& sale)
 {
-    std::vector<std::string> currs = CSVReader::tokenise(sale.product, '/');
+    vector<string> currs = CSVReader::tokenise(sale.product, '/');
     // ask
     if (sale.ordertype == orderBookType::askSale)
     {
         double outgoingAmount = sale.amount;
-        std::string outgoingCurrency = currs[0];
+        string outgoingCurrency = currs[0];
         double incomingAmount = sale.amount * sale.price;
-        std::string incomingCurrency = currs[1];
+        string incomingCurrency = currs[1];
 
         currencies[incomingCurrency] += incomingAmount;
         currencies[outgoingCurrency] -= outgoingAmount;
@@ -112,15 +112,15 @@ void Wallet::processSale(OrderBookEntry& sale)
     if (sale.ordertype == orderBookType::bidSale)
     {
         double incomingAmount = sale.amount;
-        std::string incomingCurrency = currs[0];
+        string incomingCurrency = currs[0];
         double outgoingAmount = sale.amount * sale.price;
-        std::string outgoingCurrency = currs[1];
+        string outgoingCurrency = currs[1];
 
         currencies[incomingCurrency] += incomingAmount;
         currencies[outgoingCurrency] -= outgoingAmount;
     }
 }
-std::ostream& operator<<(std::ostream& os,  Wallet& wallet)
+ostream& operator<<(ostream& os,  Wallet& wallet)
 {
     os << wallet.toString();
     return os;

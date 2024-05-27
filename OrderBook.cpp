@@ -125,85 +125,79 @@ auto Dsc = [](const OrderBookEntry& e1, const OrderBookEntry& e2) {
     cout << "max bid " << bids[0].price << std::endl;
     cout << "min bid " << bids[bids.size()-1].price << std::endl;
     
-for (OrderBookEntry& ask : asks)
-    {
-    //     for bid in bids:
-        for (OrderBookEntry& bid : bids)
+// for ask in asks:
+for(OrderBookEntry& ask :asks){
+//     for bid in bids:
+for(OrderBookEntry& bid :bids){
+//         if bid.price >= ask.price # we have a match
+        if(bid.price>=ask.price){
+//         sale = new orderbookentry()
+//         sale.price = ask.price
+
+        OrderBookEntry sale{ask.price,0,
+                        timeStamp,product,
+                        orderBookType::askSale};
+
+        orderBookType type=orderBookType::askSale;
+        if(bid.username=="simuser"){
+            sale.username="simuser";
+            sale.ordertype=orderBookType::bidSale;
+        }
+         if(bid.username=="simuser")
         {
-    //         if bid.price >= ask.price # we have a match
-            if (bid.price >= ask.price)
-            {
-    //             sale = new order()
-    //             sale.price = ask.price
-            OrderBookEntry sale{ask.price, 0, timeStamp, 
-                product, 
-                orderBookType::askSale};
+            sale.username="simuser";
+            sale.ordertype=orderBookType::askSale;
+        }
 
-                if (bid.username == "simuser")
-                {
-                    sale.username = "simuser";
-                    sale.ordertype = orderBookType::bidSale;
-                }
-                if (ask.username == "simuser")
-                {
-                    sale.username = "simuser";
-                    sale.ordertype =  orderBookType::askSale;
-                }
-            
-    //             # now work out how much was sold and 
-    //             # create new bids and asks covering 
-    //             # anything that was not sold
-    //             if bid.amount == ask.amount: # bid completely clears ask
-                if (bid.amount == ask.amount)
-                {
-    //                 sale.amount = ask.amount
-                    sale.amount = ask.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 bid.amount = 0 # make sure the bid is not processed again
-                    bid.amount = 0;
-    //                 # can do no more with this ask
-    //                 # go onto the next ask
-    //                 break
-                    break;
-                }
-    //           if bid.amount > ask.amount:  # ask is completely gone slice the bid
-                if (bid.amount > ask.amount)
-                {
-    //                 sale.amount = ask.amount
-                    sale.amount = ask.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 # we adjust the bid in place
-    //                 # so it can be used to process the next ask
-    //                 bid.amount = bid.amount - ask.amount
-                    bid.amount =  bid.amount - ask.amount;
-    //                 # ask is completely gone, so go to next ask                
-    //                 break
-                    break;
-                }
+// # now calculating how much was sold or not
+//         if bid.amount == ask.amount:
+        if(bid.amount==ask.amount)
+        {
+        // # bid completely clears ask
+        // sale.amount = ask.amount
+        sale.amount=ask.amount;
+        //sales.append(sale)
+        sales.push_back(sale);
+        // bid.amount = 0 # make sure the bid is not processed again
+        bid.amount=0;
+        // # can do no more with this ask
+        // # go onto the next ask
+           break;
 
-
-    //             if bid.amount < ask.amount # bid is completely gone, slice the ask
-                if (bid.amount < ask.amount && 
-                   bid.amount > 0)
-                {
-    //                 sale.amount = bid.amount
-                    sale.amount = bid.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 # update the ask
-    //                 # and allow further bids to process the remaining amount
-    //                 ask.amount = ask.amount - bid.amount
-                    ask.amount = ask.amount - bid.amount;
-    //                 bid.amount = 0 # make sure the bid is not processed again
-                    bid.amount = 0;
-    //                 # some ask remains so go to the next bid
-    //                 continue
-                    continue;
-                }
+        }
+        if(bid.amount>ask.amount)
+        {
+        // if bid.amount > ask.amount: 
+        // # ask is completely gone slice the bid
+        // sale.amount = ask.amount
+        sale.amount=ask.amount;   
+        // sales.append(sale)
+        // # we adjust the bid in place
+        // # so it can be used to process the next ask
+        // bid.amount = bid.amount - ask.amount
+        bid.amount = bid.amount - ask.amount;
+        // # ask is completely gone, so go to next ask
+        break;
+        }
+        if(bid.amount<ask.amount && bid.amount>0)
+        {
+        // if bid.amount < ask.amount 
+        // # bid is completely gone, slice the ask
+        // sale.amount = bid.amount
+        sale.amount=bid.amount;
+        // sales.append(sale)
+        sales.push_back(sale);
+        // # update the ask
+        // # and allow further bids to process the remaining amount
+        // ask.amount = ask.amount - bid.amount
+        ask.amount = ask.amount - bid.amount;
+        // bid.amount = 0 # make sure the bid is not processed again
+        bid.amount=0;
+        // # some ask remains so go to the next bid
+           continue;
+        }
             }
         }
     }
-    return sales;             
+    return sales;
 }
