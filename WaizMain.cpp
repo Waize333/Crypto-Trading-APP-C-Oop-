@@ -59,21 +59,6 @@ void WaizMain::printMarketStats(){
         cout<<"Min Ask: "<<OrderBook::getMinPrice(entries)<<endl;
 
     }
-//  cout<<"Orderbook Contains:"<<orders.size()<<" :enteries"<<endl;
-//  unsigned int bids = 0;
-//  unsigned int asks =0;
-//  for(OrderBookEntry&e : orders)
-//  {
-//     if(e.ordertype==orderBookType::ask)
-//     {
-//         asks ++;
-//     }
-//     if(e.ordertype==orderBookType::bid)
-//     {
-//         bids ++;
-//     }
-//  }
-// cout<<"OrdersBook Asks"<<asks<<endl<<"OrderBook bids"<<bids<<endl;
 }
 void WaizMain::enterAsk(){
     cout<<"Make an Ask-Enter the Amount:Product,Price,Amount, eg [ETH/BTC,200,0.5]"<<endl;
@@ -91,7 +76,13 @@ void WaizMain::enterAsk(){
             tokens[1],tokens[2],currentTime,
             tokens[0],orderBookType::ask
         );
-        orderBook.insertOrder(obe);
+        obe.username="simUser";
+        if(wallet.canFulfilOrder(obe))
+        {
+            cout<<"Wallet is valid"<<endl;
+            orderBook.insertOrder(obe);
+        }else
+        {cout<<"Wallet hass insufficient funds"<<endl;}
         }catch(const exception& e)
         {
             cout<<"WaizMain::enterAsk Bad Input"<<endl;
@@ -115,7 +106,13 @@ void WaizMain::enterBid(){
             tokens[1],tokens[2],currentTime,
             tokens[0],orderBookType::bid
         );
-        orderBook.insertOrder(obe);
+       obe.username="simUser";
+        if(wallet.canFulfilOrder(obe))
+        {
+            cout<<"Wallet is valid for Transaction"<<endl;
+            orderBook.insertOrder(obe);
+        }else
+        {cout<<"Wallet hass insufficient funds"<<endl;}
         }catch(const exception& e)
         {
             cout<<"WaizMain::enterBid Bad Input"<<endl;
@@ -129,14 +126,25 @@ void WaizMain::pritWallet(){
     cout<<wallet.toString()<<endl;
 }
 void WaizMain::nextTimeFrame(){
-     cout<<"Going to next step"<<endl;
-     vector<OrderBookEntry> sales =orderBook.matchAsksToBids("ETH/BTC",currentTime);
-     cout<<"Sales: "<<sales.size()<<endl;
-    for(OrderBookEntry&sale: sales)
+    std::cout << "Going to next time frame. " << std::endl;
+    for (std::string p : orderBook.getKnownProducts())
     {
-        cout<<"Sale Amount: "<<sale.price<<"amount"<<sale.amount<<endl;
+        std::cout << "matching " << p << std::endl;
+        std::vector<OrderBookEntry> sales =  orderBook.matchAsksToBids(p, currentTime);
+        std::cout << "Sales: " << sales.size() << std::endl;
+        for (OrderBookEntry& sale : sales)
+        {
+            std::cout << "Sale price: " << sale.price << " amount " << sale.amount << std::endl; 
+            if (sale.username == "simuser")
+            {
+                // update the wallet
+                wallet.processSale(sale);
+            }
+        }
+        
     }
-     currentTime=orderBook.getNextTime(currentTime);
+
+    currentTime = orderBook.getNextTime(currentTime);
 }
 void WaizMain::processUserOption(int userOption ){
     if (userOption==0) {

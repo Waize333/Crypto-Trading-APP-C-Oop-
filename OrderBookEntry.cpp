@@ -6,14 +6,17 @@ OrderBookEntry::OrderBookEntry(double price,
                                double amount,
                                string timeStamp,
                                string product,
-                               orderBookType ordertype)
+                               orderBookType ordertype,
+                               string username)
     : price(price),
       amount(amount),
       timeStamp(timeStamp),
       product(product),
-      ordertype(ordertype) // Colon indicates initialization of member variables
+      ordertype(ordertype),
+      username(username)
+      
 {
-    // Constructor body
+    
 }
 
 orderBookType OrderBookEntry::stringToOrderbookType(string s)
