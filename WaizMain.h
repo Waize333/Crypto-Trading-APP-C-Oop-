@@ -23,7 +23,7 @@ public:
     void nextTimeFrame();
     void processUserOption(int userOption );
     
-    OrderBook orderBook{"tradingData.csv"};
+    OrderBook orderBook{"live_data.csv"};
     string currentTime;
     Wallet wallet;
 };

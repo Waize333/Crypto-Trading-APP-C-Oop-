@@ -11,7 +11,7 @@ void WaizMain::init()
  
     int input;
     currentTime=orderBook.getEarliestTime();
-    wallet.insertCurrency("BTC",10);
+    wallet.insertCurrency("USDT",10000);
     
     while(true){
         printMenu();
@@ -33,7 +33,7 @@ void WaizMain::printMenu() {
     cout << "| 5: Print Wallet                  |" << endl;
     cout << "| 6: Continue                      |" << endl;
     cout << "====================================" << endl;
-    cout << "| Current Time: " << currentTime << "         |" << endl;
+    cout << "| Current Time: " <<currentTime<<" |" << endl;
     cout << "====================================" << endl;
 }
 
@@ -82,7 +82,6 @@ void WaizMain::printMarketStats() {
 void WaizMain::enterAsk(){
     cout<<" Make an Ask - Enter Product, Price, and Amount: [e.g. ETH/BTC, $200, 0.5]"<<endl;
     string input;
-    //The purpose of the function is to clear the input buffer up to the next newline character.
     getline(cin,input);
     vector<string>tokens=CSVReader::tokenise(input,',');
     if(tokens.size()!=3)
@@ -148,7 +147,7 @@ void WaizMain::nextTimeFrame(){
     std::cout << "Moving to the Next Timeframe" << std::endl;
     for (std::string p : orderBook.getKnownProducts())
     {
-        std::cout << "matching " << p << std::endl;
+        std::cout << "Matching :  " << p << std::endl;
         std::vector<OrderBookEntry> sales =  orderBook.matchAsksToBids(p, currentTime);
         std::cout << "Sales: " << sales.size() << std::endl;
         for (OrderBookEntry& sale : sales)

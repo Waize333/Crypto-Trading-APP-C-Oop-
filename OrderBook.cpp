@@ -1,6 +1,9 @@
-#include"OrderBook.h"
-#include<map>
-#include<algorithm>
+#include "OrderBook.h"
+#include "CSVReader.h"
+#include <map>
+#include <algorithm>
+#include <iostream>
+
 
   // making a constructor to rad Csv data file
     OrderBook::OrderBook(string filename)
@@ -78,7 +81,8 @@ string OrderBook::getNextTime(string timeStamp)
             break;
         }
     }
-    if (nextTimeStamp == "" && !orders.empty()) {
+    if (nextTimeStamp == "") 
+    {
         nextTimeStamp = orders[0].timeStamp;
     }
     return nextTimeStamp;
@@ -94,109 +98,75 @@ void OrderBook::insertOrder(OrderBookEntry& order)
    orders.push_back(order);
    sort(orders.begin(),orders.end(),comp);
 }
-vector<OrderBookEntry> OrderBook::matchAsksToBids(string product,string timeStamp)
-{
-// asks = orderbook.asks in this timeframe
-vector<OrderBookEntry>asks =getOrders(orderBookType::ask ,
-                                    product,
-                                    timeStamp );
-// bids = orderbook.bids in this timeframe
-vector<OrderBookEntry>bids =getOrders(orderBookType::bid ,
-                                    product,
-                                    timeStamp );
+/** Match asks to bids and return the sales */
+vector<OrderBookEntry> OrderBook::matchAsksToBids(string product, string timestamp) {
+    // Get all asks and bids for the given product and timestamp
+    vector<OrderBookEntry> asks = getOrders(orderBookType::ask, product, timestamp);
+    vector<OrderBookEntry> bids = getOrders(orderBookType::bid, product, timestamp);
+    vector<OrderBookEntry> sales;
 
-// sales = []
-vector<OrderBookEntry>sales;
-
-// sort asks lowest first
-//using the custom lambda
+    // Check if there are bids and asks to process
+    if (asks.size() == 0 || bids.size() == 0) {
+        cout << " OrderBook::matchAsksToBids no bids or asks" << endl;
+        return sales;
+    }
 auto Asc = [](const OrderBookEntry& e1, const OrderBookEntry& e2) {
     return e1.price < e2.price;
 };
-    sort(asks.begin(),asks.end(),Asc);
-// sort bids highest first
+
+    // Sort asks lowest first
+    sort(asks.begin(), asks.end(),Asc);
+    
 auto Dsc = [](const OrderBookEntry& e1, const OrderBookEntry& e2) {
     return e1.price > e2.price;
 };
-    sort(bids.begin(),bids.end(),Dsc);
 
-    cout << "max ask " << asks[asks.size()-1].price << endl;
-    cout << "min ask " << asks[0].price << endl;
-    cout << "max bid " << bids[0].price << endl;
-    cout << "min bid " << bids[bids.size()-1].price <<endl;
-    
-// for ask in asks:
-for(OrderBookEntry& ask :asks){
-//     for bid in bids:
-for(OrderBookEntry& bid :bids){
-//         if bid.price >= ask.price # we have a match
-        if(bid.price>=ask.price){
-//         sale = new orderbookentry()
-//         sale.price = ask.price
+    // Sort bids highest first
+    sort(bids.begin(), bids.end(),Dsc);
 
-        OrderBookEntry sale{ask.price,0,
-                        timeStamp,product,
-                        orderBookType::askSale};
+    // Iterate through asks and bids to match and generate sales
+    // for each ask in asks:
+    for (OrderBookEntry& ask : asks) {
+        // for each bid in bids:
+        for (OrderBookEntry& bid : bids) {
+            // if bid.price >= ask.price, we have a match
+            if (bid.price >= ask.price) {
+                // Create a sale entry
+                OrderBookEntry sale{ask.price, 0, timestamp, product, orderBookType::askSale};
 
-     
-        if(bid.username=="simUser"){
-            sale.username="simUser";
-            sale.ordertype=orderBookType::bidSale;
-        }
-         if(ask.username=="simUser")
-        {
-            sale.username="simUser";
-            sale.ordertype=orderBookType::askSale;
-        }
+                // Determine usernames and order types
+                if (bid.username == "simUser") {
+                    sale.username = "simUser";
+                    sale.ordertype = orderBookType::bidSale;
+                }
+                if (ask.username == "simUser") {
+                    sale.username = "simUser";
+                    sale.ordertype = orderBookType::askSale;
+                }
 
-// # now calculating how much was sold or not
-//         if bid.amount == ask.amount:
-        if(bid.amount==ask.amount)
-        {
-        // # bid completely clears ask
-        // sale.amount = ask.amount
-        sale.amount=ask.amount;
-        //sales.append(sale)
-        sales.push_back(sale);
-        // bid.amount = 0 # make sure the bid is not processed again
-        bid.amount=0;
-        // # can do no more with this ask
-        // # go onto the next ask
-           break;
-
-        }
-        if(bid.amount>ask.amount)
-        {
-        // if bid.amount > ask.amount: 
-        // # ask is completely gone slice the bid
-        // sale.amount = ask.amount
-        sale.amount=ask.amount;   
-        // sales.append(sale)
-         sales.push_back(sale);
-        // # we adjust the bid in place
-        // # so it can be used to process the next ask
-        // bid.amount = bid.amount - ask.amount
-        bid.amount = bid.amount - ask.amount;
-        // # ask is completely gone, so go to next ask
-        break;
-        }
-        if(bid.amount<ask.amount && bid.amount>0)
-        {
-        // if bid.amount < ask.amount 
-        // # bid is completely gone, slice the ask
-        // sale.amount = bid.amount
-        sale.amount=bid.amount;
-        // sales.append(sale)
-        sales.push_back(sale);
-        // # update the ask
-        // # and allow further bids to process the remaining amount
-        // ask.amount = ask.amount - bid.amount
-        ask.amount = ask.amount - bid.amount;
-        // bid.amount = 0 # make sure the bid is not processed again
-        bid.amount=0;
-        // # some ask remains so go to the next bid
-           continue;
-        }
+                // Now calculate how much was sold or not
+                if (bid.amount == ask.amount) {
+                    // Bid completely clears ask
+                    sale.amount = ask.amount;
+                    sales.push_back(sale);
+                    bid.amount = 0; // Make sure the bid is not processed again
+                    break; // Can do no more with this ask, go onto the next ask
+                }
+                if (bid.amount > ask.amount) {
+                    // Ask is completely gone, slice the bid
+                    sale.amount = ask.amount;
+                    sales.push_back(sale);
+                    bid.amount -= ask.amount; // Adjust the bid in place for next ask
+                    break;
+                }
+                if (bid.amount < ask.amount && bid.amount > 0) {
+                    // Bid is completely gone, slice the ask
+                    sale.amount = bid.amount;
+                    sales.push_back(sale);
+                    ask.amount -= bid.amount; // Update the ask for further bids
+                    bid.amount = 0; // Make sure the bid is not processed again
+                    continue; // Some ask remains, go to the next bid
+                }
             }
         }
     }

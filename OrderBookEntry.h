@@ -13,9 +13,20 @@ OrderBookEntry(double price,
             string product,
             orderBookType ordertype,
             string username="dataset");
+ static bool compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)
+        {
+            return e1.timeStamp < e2.timeStamp;
+        }  
+static bool compareByPriceAsc(OrderBookEntry& e1, OrderBookEntry& e2)
+        {
+            return e1.price < e2.price;
+        }
+static bool compareByPriceDesc(OrderBookEntry& e1, OrderBookEntry& e2)
+        {
+            return e1.price > e2.price;
+        }
 
 static orderBookType stringToOrderbookType(string s);
-static bool compareByTimeStamp(OrderBookEntry& e1,OrderBookEntry& e2);
 double price;
 double amount;
 string timeStamp;
