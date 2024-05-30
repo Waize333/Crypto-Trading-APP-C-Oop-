@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-  // making a constructor to rad Csv data file
+  // making a constructor to read Csv data file
     OrderBook::OrderBook(string filename)
     {
         orders=CSVReader::ReadCSV(filename);

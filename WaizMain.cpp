@@ -80,7 +80,7 @@ void WaizMain::printMarketStats() {
 }
 
 void WaizMain::enterAsk(){
-    cout<<" Make an Ask - Enter Product, Price, and Amount: [e.g. ETH/BTC, $200, 0.5]"<<endl;
+    cout<<" Make an Ask - Enter Product, Price, and Amount: [e.g. BTC/USDT, $200, 0.5]"<<endl;
     string input;
     getline(cin,input);
     vector<string>tokens=CSVReader::tokenise(input,',');
@@ -108,7 +108,7 @@ void WaizMain::enterAsk(){
     }
  }
 void WaizMain::enterBid(){
-      cout << " Place a Bid - Enter Product, Price, and Amount: [e.g. ETH/BTC, $200, 0.5]" << endl;
+      cout << " Place a Bid - Enter Product, Price, and Amount: [e.g. ETH/USDT, $200, 0.5]" << endl;
 
     string input;
     //The purpose of the function is to clear the input buffer up to the next newline character.
